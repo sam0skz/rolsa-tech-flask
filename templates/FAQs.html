@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block title %}FAQs - Rolsa Technologies{% endblock %}
+
+{% block extra_css %}
+<style>
+    .faq-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    .faq-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .faq-header h1 {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .faq-search {
+        margin-bottom: 40px;
+    }
+    
+    .faq-search input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid var(--border-color);
+        border-radius: 50px;
+        font-size: 1rem;
+        background: var(--bg-color);
+        color: var(--text-color);
+        transition: var(--transition);
+    }
+    
+    .faq-search input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+    }
+    
+    .faq-categories {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .category-btn {
+        padding: 10px 25px;
+        border: 2px solid var(--border-color);
+        border-radius: 30px;
+        background: transparent;
+        color: var(--text-color);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .category-btn:hover,
+    .category-btn.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+    
+    .faq-item {
+        background: var(--card-bg);
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+    
+    .faq-question {
+        padding: 20px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .faq-question:hover {
+        background: rgba(46, 139, 87, 0.1);
+    }
+    
+    .faq-question h3 {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        margin: 0;
+        flex: 1;
+    }
+    
+    .faq-arrow {
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .faq-arrow.active {
+        transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+        max-height: 0;
+        padding: 0 25px;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        background: var(--bg-color);
+    }
+    
+    .faq-answer.active {
+        max-height: 500px;
+        padding: 20px 25px;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .faq-answer p {
+        color: var(--text-color);
+        line-height: 1.8;
+        margin: 0;
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 40px;
+        background: var(--card-bg);
+        border-radius: 15px;
+        display: none;
+    }
+    
+    .highlight {
+        background: #fff3cd;
+        padding: 2px;
+        border-radius: 3px;
+        color: #856404;
+    }
+    
+    .dark-mode .highlight {
+        background: #856404;
+        color: #fff3cd;
+    }
+    
+    .contact-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 60px 40px;
+        border-radius: 15px;
+        text-align: center;
+        margin-top: 60px;
+    }
+    
+    .contact-section h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    
+    .contact-section p {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+    }
+    
+    .contact-btn {
+        display: inline-block;
+        background: white;
+        color: var(--primary-color);
+        padding: 15px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: var(--transition);
+    }
+    
+    .contact-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="faq-container">
+    <div class="faq-header">
+        <h1>Frequently Asked Questions</h1>
+        <p style="font-size: 1.2rem; color: var(--text-color);">Find answers to common questions about our products and services</p>
+    </div>
+    
+    <div class="faq-search">
+        <input type="text" id="faqSearch" placeholder="🔍 Search FAQs...">
+    </div>
+    
+    <div class="faq-categories">
+        <button class="category-btn active" data-category="all">All</button>
+        <button class="category-btn" data-category="solar">Solar Energy</button>
+        <button class="category-btn" data-category="ev">EV Charging</button>
+        <button class="category-btn" data-category="smart">Smart Home</button>
+        <button class="category-btn" data-category="account">Account & Billing</button>
+    </div>
+    
+    <div class="faq-list">
+        <div class="faq-item" data-category="solar">
+            <div class="faq-question">
+                <h3>How much can I save with solar panels?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p>On average, homeowners save between £300-£700 per year on electricity bills. With the current energy prices, most systems pay for themselves within 8-12 years. With smart energy management, you can maximize savings by using appliances during peak solar generation hours.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="solar">
+            <div class="faq-question">
+                <h3>Do solar panels work on cloudy days?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! Solar panels still generate electricity on cloudy days, just at reduced efficiency (typically 10-25% of their rated capacity). Modern panels are designed to capture diffuse light, and the UK actually receives enough sunlight to make solar viable year-round.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="ev">
+            <div class="faq-question">
+                <h3>How long does it take to charge an EV?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p>Charging time depends on your charger type: 7kW charger adds about 30 miles of range per hour (full charge 4-8 hours), 22kW charger adds about 90 miles per hour (full charge 1-3 hours). Overnight charging is recommended for most users.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="ev">
+            <div class="faq-question">
+                <h3>Can I charge my EV with solar panels?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p>Absolutely! This is one of the best combinations. Our smart EV chargers can automatically charge your car when your solar panels are generating excess electricity, allowing you to drive on 100% free, clean energy.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="smart">
+            <div class="faq-question">
+                <h3>What smart home devices do you offer?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p>We offer comprehensive smart home solutions including: smart thermostats, intelligent lighting controls, energy monitoring systems, smart plugs and switches, and whole-home automation hubs. All systems can be controlled via our mobile app and integrate with Alexa/Google Home.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="account">
+            <div class="faq-question">
+                <h3>How do I track my energy usage?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p>Once logged into your Rolsa Technologies dashboard, you can track your energy consumption, solar generation, and carbon savings in real-time. Our system provides detailed reports and insights to help you optimize your energy usage.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="account">
+            <div class="faq-question">
+                <h3>What payment methods do you accept?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p>We accept all major credit/debit cards, bank transfers, and offer 0% financing options for qualified customers. We also accept various green energy grants and government incentives where applicable.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="solar">
+            <div class="faq-question">
+                <h3>What maintenance do solar panels need?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p>Solar panels require minimal maintenance - just occasional cleaning and annual professional inspection. Our monitoring system alerts us to any performance issues, and we offer comprehensive maintenance packages to keep your system running optimally.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="no-results">
+        <h3 style="color: var(--text-color); margin-bottom: 15px;">No matching questions found</h3>
+        <p style="color: var(--text-color);">Try different keywords or contact our support team for assistance.</p>
+    </div>
+    
+    <div class="contact-section">
+        <h2>Still Have Questions?</h2>
+        <p>Our team of energy experts is here to help you make informed decisions about your sustainable energy journey.</p>
+        <a href="{{ url_for('Aboutus') }}" class="contact-btn">Contact Us</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle FAQ answers
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const arrow = this.querySelector('.faq-arrow');
+                
+                // Close other open FAQs
+                document.querySelectorAll('.faq-answer.active').forEach(activeAnswer => {
+                    if (activeAnswer !== answer) {
+                        activeAnswer.classList.remove('active');
+                        activeAnswer.previousElementSibling.querySelector('.faq-arrow').classList.remove('active');
+                    }
+                });
+                
+                answer.classList.toggle('active');
+                arrow.classList.toggle('active');
+            });
+        });
+        
+        // Search functionality
+        const searchInput = document.getElementById('faqSearch');
+        const faqItems = document.querySelectorAll('.faq-item');
+        const noResults = document.querySelector('.no-results');
+        
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            let hasResults = false;
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('h3').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer p').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                    hasResults = true;
+                    
+                    // Highlight matching text
+                    if (searchTerm.length > 2) {
+                        const regex = new RegExp(searchTerm, 'gi');
+                        const questionEl = item.querySelector('h3');
+                        const answerEl = item.querySelector('.faq-answer p');
+                        
+                        questionEl.innerHTML = questionEl.textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
+                        answerEl.innerHTML = answerEl.textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
+                    }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            noResults.style.display = hasResults ? 'none' : 'block';
+        });
+        
+        // Category filtering
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const category = this.dataset.category;
+                
+                faqItems.forEach(item => {
+                    if (category === 'all' || item.dataset.category === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                // Reset search
+                searchInput.value = '';
+                noResults.style.display = 'none';
+            });
+        });
+    });
+</script>
+{% endblock %}

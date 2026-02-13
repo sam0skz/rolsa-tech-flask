@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block title %}Everything Energy - Rolsa Technologies{% endblock %}
+
+{% block extra_css %}
+<link rel='stylesheet' href="{{ url_for('static', filename='css/energy-style.css') }}">
+<style>
+    .energy-hero {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 80px 20px;
+        text-align: center;
+        margin-bottom: 60px;
+    }
+    
+    .energy-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+    
+    .solutions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto 60px;
+        padding: 0 20px;
+    }
+    
+    .solution-card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+    }
+    
+    .solution-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    
+    .solution-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+    
+    .solution-content {
+        padding: 25px;
+    }
+    
+    .solution-content h3 {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .solution-features {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+    
+    .solution-features li {
+        padding: 8px 0;
+        padding-left: 25px;
+        position: relative;
+    }
+    
+    .solution-features li:before {
+        content: "✓";
+        color: var(--primary-color);
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+    }
+    
+    .carousel-section {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+    
+    .carousel-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        gap: 20px;
+        padding: 20px 0;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) var(--border-color);
+    }
+    
+    .carousel-container::-webkit-scrollbar {
+        height: 8px;
+    }
+    
+    .carousel-container::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 4px;
+    }
+    
+    .carousel-item {
+        flex: 0 0 auto;
+        width: 300px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+    
+    .carousel-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+    
+    .carousel-item:hover .carousel-image {
+        transform: scale(1.05);
+    }
+    
+    .carousel-nav {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+    
+    .carousel-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .carousel-btn:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+    
+    .benefits-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 80px 20px;
+        margin: 60px 0;
+    }
+    
+    .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    
+    .benefit-item {
+        padding: 30px;
+    }
+    
+    .benefit-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+    
+    .benefit-title {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+    
+    @media (max-width: 768px) {
+        .energy-hero h1 {
+            font-size: 2rem;
+        }
+        
+        .solutions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="energy-hero">
+    <h1>⚡ Everything Energy</h1>
+    <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto;">Discover our comprehensive range of sustainable energy solutions designed for a greener future</p>
+</div>
+
+<div class="solutions-grid">
+    <div class="solution-card slide-in-left">
+        <img src="{{ url_for('static', filename='images/solar-panel2.jpg') }}" alt="Solar Panel Systems" class="solution-image">
+        <div class="solution-content">
+            <h3>☀️ Solar Panel Systems</h3>
+            <p>High-efficiency solar panels that reduce energy bills and carbon footprint by up to 70%.</p>
+            <ul class="solution-features">
+                <li>25-year performance warranty</li>
+                <li>Smart monitoring included</li>
+                <li>Government grant eligible</li>
+                <li>Professional installation</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="solution-card fade-in">
+        <img src="{{ url_for('static', filename='images/smart-home-1.jpg') }}" alt="Smart Home Energy" class="solution-image">
+        <div class="solution-content">
+            <h3>🏠 Smart Home Energy</h3>
+            <p>Intelligent systems that optimize your home's energy usage automatically.</p>
+            <ul class="solution-features">
+                <li>AI-powered optimization</li>
+                <li>Real-time consumption tracking</li>
+                <li>Remote control via app</li>
+                <li>Compatible with Alexa/Google</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="solution-card slide-in-right">
+        <img src="{{ url_for('static', filename='images/Ev-Charging2.jpg') }}" alt="EV Charging Stations" class="solution-image">
+        <div class="solution-content">
+            <h3>🚗 EV Charging Stations</h3>
+            <p>Fast, reliable charging solutions for all major EV models.</p>
+            <ul class="solution-features">
+                <li>7kW-22kW charging speeds</li>
+                <li>Smart scheduling</li>
+                <li>Solar integration ready</li>
+                <li>OLEV grant approved</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="benefits-section">
+    <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px;">Why Go Green?</h2>
+    <div class="benefits-grid">
+        <div class="benefit-item">
+            <div class="benefit-icon">💰</div>
+            <div class="benefit-title">Save Money</div>
+            <p>Reduce energy bills by up to 70% with solar and smart home solutions</p>
+        </div>
+        <div class="benefit-item">
+            <div class="benefit-icon">🌍</div>
+            <div class="benefit-title">Protect the Planet</div>
+            <p>Cut your carbon footprint and contribute to a sustainable future</p>
+        </div>
+        <div class="benefit-item">
+            <div class="benefit-icon">⚡</div>
+            <div class="benefit-title">Energy Independence</div>
+            <p>Generate your own clean energy and reduce reliance on the grid</p>
+        </div>
+        <div class="benefit-item">
+            <div class="benefit-icon">📈</div>
+            <div class="benefit-title">Increase Property Value</div>
+            <p>Homes with solar and smart tech sell for up to 15% more</p>
+        </div>
+    </div>
+</div>
+
+<div class="carousel-section">
+    <h2 style="text-align: center; color: var(--primary-color); margin-bottom: 30px;">More Energy Solutions</h2>
+    <div class="carousel-container" id="carousel">
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/energy1.jpg') }}" alt="Energy Storage" class="carousel-image">
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/energy2.jpg') }}" alt="Heat Pumps" class="carousel-image">
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/energy3.jpg') }}" alt="Wind Turbines" class="carousel-image">
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/energy4.jpg') }}" alt="Battery Storage" class="carousel-image">
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/energy5.jpg') }}" alt="Smart Meters" class="carousel-image">
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/energy6.jpg') }}" alt="Energy Consulting" class="carousel-image">
+        </div>
+    </div>
+    
+    <div class="carousel-nav">
+        <button class="carousel-btn" onclick="moveCarousel(-1)">← Previous</button>
+        <button class="carousel-btn" onclick="moveCarousel(1)">Next →</button>
+    </div>
+</div>
+
+<div style="max-width: 800px; margin: 60px auto; padding: 0 20px; text-align: center;">
+    <h2 style="color: var(--primary-color); margin-bottom: 20px;">Ready to Make the Switch?</h2>
+    <p style="font-size: 1.1rem; margin-bottom: 30px;">Join thousands of satisfied customers who have already transformed their energy consumption with Rolsa Technologies.</p>
+    {% if not session.username %}
+        <a href="{{ url_for('signup') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 15px 40px;">Get Started Today</a>
+    {% else %}
+        <a href="{{ url_for('schedule') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 15px 40px;">Schedule a Consultation</a>
+    {% endif %}
+</div>
+
+<script>
+    let currentPosition = 0;
+    const carousel = document.getElementById('carousel');
+    const items = document.querySelectorAll('.carousel-item');
+    const itemsPerView = window.innerWidth > 768 ? 3 : 1;
+    
+    function moveCarousel(direction) {
+        const maxPosition = Math.max(0, items.length - itemsPerView);
+        currentPosition = currentPosition + direction;
+        
+        if (currentPosition < 0) currentPosition = maxPosition;
+        if (currentPosition > maxPosition) currentPosition = 0;
+        
+        const itemWidth = items[0]?.offsetWidth || 320;
+        const gap = 20;
+        carousel.scrollLeft = currentPosition * (itemWidth + gap);
+    }
+    
+    // Auto-scroll every 5 seconds
+    setInterval(() => {
+        moveCarousel(1);
+    }, 5000);
+    
+    // Update itemsPerView on window resize
+    window.addEventListener('resize', function() {
+        itemsPerView = window.innerWidth > 768 ? 3 : 1;
+    });
+</script>
+{% endblock %}

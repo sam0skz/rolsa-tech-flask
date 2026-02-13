@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Rolsa Technologies - Sustainable Energy Solutions{% endblock %}
+
+{% block extra_css %}
+<link rel='stylesheet' href="{{ url_for('static', filename='css/home-style.css') }}">
+<style>
+    .hero {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                    url("{{ url_for('static', filename='images/solar-panel1.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <h1 class="fade-in">ROLSA TECHNOLOGIES</h1>
+    <p class="fade-in">Pioneering sustainable energy solutions for a greener tomorrow</p>
+    <div class="hero-buttons fade-in">
+        <a href="{{ url_for('signup') }}" class="btn btn-primary">Create Account</a>
+        <a href="{{ url_for('energy') }}" class="btn btn-secondary">Explore Solutions</a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <h2 class="slide-in-left">Why Choose Rolsa Technologies?</h2>
+    <div class="features-grid">
+        <div class="feature-card slide-in-left">
+            <img src="{{ url_for('static', filename='images/solar-panel1.jpg') }}" alt="Solar Solutions" class="feature-img">
+            <div class="feature-content">
+                <h3>Cutting-Edge Solar Technology</h3>
+                <p>Our high-efficiency solar panels deliver more power in less space, with industry-leading durability.</p>
+            </div>
+        </div>
+        <div class="feature-card slide-in-left">
+            <img src="{{ url_for('static', filename='images/home-manager.jpg') }}" alt="Smart Home" class="feature-img">
+            <div class="feature-content">
+                <h3>Intelligent Energy Management</h3>
+                <p>AI-powered systems optimize your energy usage 24/7, maximizing savings and efficiency.</p>
+            </div>
+        </div>
+        <div class="feature-card slide-in-right">
+            <img src="{{ url_for('static', filename='images/tesla.jpg') }}" alt="EV Charging" class="feature-img">
+            <div class="feature-content">
+                <h3>Future-Ready EV Solutions</h3>
+                <p>Fast-charging stations designed for tomorrow's electric vehicles, available today.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="stats">
+    <div class="stats-grid">
+        <div class="stat-item fade-in">
+            <span class="stat-number">10K+</span>
+            <span class="stat-label">Happy Customers</span>
+        </div>
+        <div class="stat-item fade-in">
+            <span class="stat-number">50K+</span>
+            <span class="stat-label">Solar Panels Installed</span>
+        </div>
+        <div class="stat-item fade-in">
+            <span class="stat-number">30K+</span>
+            <span class="stat-label">Tons CO₂ Saved</span>
+        </div>
+        <div class="stat-item fade-in">
+            <span class="stat-number">5K+</span>
+            <span class="stat-label">EV Chargers</span>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials">
+    <h2>What Our Customers Say</h2>
+    <div class="testimonial-grid">
+        <div class="testimonial-card slide-in-left">
+            <p class="testimonial-text">"Rolsa Technologies transformed our home energy system. Our electricity bills have dropped by 60%!"</p>
+            <p class="testimonial-author">John Smith</p>
+            <p class="testimonial-position">Homeowner, London</p>
+        </div>
+        <div class="testimonial-card fade-in">
+            <p class="testimonial-text">"The EV charging installation was seamless and the team was incredibly professional."</p>
+            <p class="testimonial-author">Sarah Johnson</p>
+            <p class="testimonial-position">Business Owner, Manchester</p>
+        </div>
+        <div class="testimonial-card slide-in-right">
+            <p class="testimonial-text">"Their smart home system paid for itself within the first year. Highly recommended!"</p>
+            <p class="testimonial-author">David Williams</p>
+            <p class="testimonial-position">Tech Entrepreneur, Bristol</p>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Badges -->
+<section class="trust-badges">
+    <h2>Trusted By Industry Leaders</h2>
+    <div class="badges-grid">
+        <div class="badge-item">
+            <div class="badge-icon">⭐</div>
+            <div class="badge-title">4.9/5 Rating</div>
+            <div class="badge-text">1,000+ Reviews</div>
+        </div>
+        <div class="badge-item">
+            <div class="badge-icon">🏆</div>
+            <div class="badge-title">Award Winner</div>
+            <div class="badge-text">Green Energy 2024</div>
+        </div>
+        <div class="badge-item">
+            <div class="badge-icon">🔒</div>
+            <div class="badge-title">Secure Payments</div>
+            <div class="badge-text">SSL Encrypted</div>
+        </div>
+        <div class="badge-item">
+            <div class="badge-icon">🌍</div>
+            <div class="badge-title">Carbon Neutral</div>
+            <div class="badge-text">Since 2023</div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-container">
+        <h2 class="fade-in">Ready to Join the Energy Revolution?</h2>
+        <p class="fade-in">Create your account today to unlock personalized energy solutions, real-time monitoring, and exclusive member benefits.</p>
+        <a href="{{ url_for('signup') }}" class="btn btn-primary fade-in">Get Started Now</a>
+    </div>
+</section>
+{% endblock %}

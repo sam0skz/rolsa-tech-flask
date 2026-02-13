@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Rolsa Technologies{% endblock %}
+
+{% block extra_css %}
+<style>
+    .welcome-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    .welcome-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .welcome-header h1 {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+    
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+    
+    .dashboard-card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+    }
+    
+    .dashboard-card h2 {
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 10px;
+    }
+    
+    .activity-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .activity-list li {
+        padding: 12px;
+        margin: 8px 0;
+        background: var(--bg-color);
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+    
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .quick-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .quick-action-btn {
+        flex: 1;
+        min-width: 150px;
+        padding: 15px;
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        text-align: center;
+        transition: var(--transition);
+    }
+    
+    .quick-action-btn:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+    
+    .appointments-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .appointments-table th,
+    .appointments-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .appointments-table th {
+        background: var(--primary-color);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="welcome-container">
+    <div class="welcome-header">
+        <h1>Welcome back, {{ user_info.first_name }}! 👋</h1>
+        <p>Track and manage your carbon footprint activities here.</p>
+    </div>
+    
+    <div class="dashboard-grid">
+        <!-- User Info Card -->
+        <div class="dashboard-card">
+            <h2>Your Profile</h2>
+            <p><strong>Username:</strong> {{ user_info.username }}</p>
+            <p><strong>Full Name:</strong> {{ user_info.first_name }} {{ user_info.surname }}</p>
+            <p><strong>Date of Birth:</strong> {{ user_info.dob }}</p>
+        </div>
+        
+        <!-- Quick Actions Card -->
+        <div class="dashboard-card">
+            <h2>Quick Actions</h2>
+            <div class="quick-actions">
+                <a href="{{ url_for('log_carbon') }}" class="quick-action-btn">➕ Log Carbon</a>
+                <a href="{{ url_for('schedule') }}" class="quick-action-btn">📅 Schedule Service</a>
+                <a href="{{ url_for('energy_calc') }}" class="quick-action-btn">⚡ Energy Calc</a>
+                <a href="{{ url_for('view_appointments') }}" class="quick-action-btn">📋 My Appointments</a>
+            </div>
+        </div>
+        
+        <!-- Carbon Activities Card -->
+        <div class="dashboard-card">
+            <h2>Your Carbon Activities</h2>
+            {% if rolsa_carbons %}
+                <ul class="activity-list">
+                    {% for activity in rolsa_carbons %}
+                        <li>
+                            <strong>{{ activity[3] }}</strong><br>
+                            <small>Date: {{ activity[2] }} | Carbon Output: {{ activity[4] }} tons CO₂e</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p style="text-align: center; margin: 20px 0;">No activities recorded yet.</p>
+                <a href="{{ url_for('log_carbon') }}" class="btn btn-primary" style="display: block; text-align: center;">Add Your First Activity</a>
+            {% endif %}
+        </div>
+        
+        <!-- Appointments Card -->
+        <div class="dashboard-card">
+            <h2>Upcoming Appointments</h2>
+            {% if appointments %}
+                <table class="appointments-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appt in appointments[:3] %}
+                        <tr>
+                            <td>{{ 'Installation' if appt[2] == 'installation' else 'Maintenance' }}</td>
+                            <td>{{ appt[3] }}</td>
+                            <td>{{ appt[4] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{{ url_for('view_appointments') }}" style="display: block; text-align: center; margin-top: 15px;">View All Appointments →</a>
+            {% else %}
+                <p style="text-align: center; margin: 20px 0;">No appointments scheduled.</p>
+                <a href="{{ url_for('schedule') }}" class="btn btn-primary" style="display: block; text-align: center;">Schedule Now</a>
+            {% endif %}
+        </div>
+        
+        <!-- Educational Video Card -->
+        <div class="dashboard-card" style="grid-column: 1 / -1;">
+            <h2>Learn About Reducing Your Carbon Footprint</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/rByHiqc0K9k" 
+                        title="How to Lower Your Carbon Footprint" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

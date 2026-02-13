@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>{% block title %}Rolsa Technologies - Sustainable Energy Solutions{% endblock %}</title>
+    <link rel='stylesheet' href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Accessibility Toolbar -->
+    <div class="accessibility-toolbar">
+        <button class="accessibility-btn" id="darkModeToggle">
+            <span>🌙</span> Dark Mode
+        </button>
+        
+        <div class="text-size-controls">
+            <button class="text-size-btn" id="decreaseText">A-</button>
+            <button class="text-size-btn" id="resetText">A</button>
+            <button class="text-size-btn" id="increaseText">A+</button>
+        </div>
+        
+        <button class="accessibility-btn" id="highContrastToggle">
+            <span>👁️</span> High Contrast
+        </button>
+        
+        <button class="accessibility-btn" id="dyslexiaToggle">
+            <span>ℹ️</span> Dyslexia Friendly
+        </button>
+        
+        <button class="accessibility-btn" id="underlineLinks">
+            <span>🔗</span> Underline Links
+        </button>
+    </div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">Rolsa Technologies</div>
+            <div class="nav-links">
+                {% if session.username %}
+                    <a href="{{ url_for('welcome') }}">Dashboard</a>
+                    <a href="{{ url_for('schedule') }}">Schedule</a>
+                    <a href="{{ url_for('view_appointments') }}">My Appointments</a>
+                    <a href="{{ url_for('log_carbon') }}">Log Carbon</a>
+                    <a href="{{ url_for('energy_calc') }}">Energy Calc</a>
+                    <a href="{{ url_for('energy') }}">Solutions</a>
+                    <a href="{{ url_for('Aboutus') }}">About</a>
+                    <a href="{{ url_for('FAQs') }}">FAQs</a>
+                    <a href="{{ url_for('logout') }}" class="cta">Logout ({{ session.username }})</a>
+                {% else %}
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="{{ url_for('energy') }}">Energy Solutions</a>
+                    <a href="{{ url_for('index') }}">Login</a>
+                    <a href="{{ url_for('signup') }}" class="cta">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Rolsa Technologies</h3>
+                <p>Innovating Tomorrow's Solutions Today.</p>
+                <div class="social-links">
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Instagram</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <p>📍 Building 555, Rolsa Street</p>
+                <p>1458 Purdy Ridges, Suite 954</p>
+                <p>London, 123456</p>
+                <p>📞 +44 07512 345678</p>
+                <p>✉️ rolsatechnologies@gmail.com</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('energy') }}">Energy Solutions</a>
+                <a href="{{ url_for('energy_calc') }}">Energy Calculator</a>
+                {% if session.username %}
+                    <a href="{{ url_for('schedule') }}">Schedule Service</a>
+                    <a href="{{ url_for('log_carbon') }}">Log Carbon</a>
+                    <a href="{{ url_for('view_appointments') }}">My Appointments</a>
+                {% else %}
+                    <a href="{{ url_for('signup') }}">Create Account</a>
+                    <a href="{{ url_for('index') }}">Login</a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Rolsa Technologies. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Accessibility Features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dark Mode Toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            darkModeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDarkMode);
+                darkModeToggle.innerHTML = isDarkMode ? '<span>☀️</span> Light Mode' : '<span>🌙</span> Dark Mode';
+            });
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.innerHTML = '<span>☀️</span> Light Mode';
+            }
+            
+            // Text Size Controls
+            const decreaseText = document.getElementById('decreaseText');
+            const resetText = document.getElementById('resetText');
+            const increaseText = document.getElementById('increaseText');
+            
+            decreaseText.addEventListener('click', function() { changeFontSize(-1); });
+            resetText.addEventListener('click', function() {
+                document.body.style.fontSize = '16px';
+                localStorage.removeItem('fontSize');
+            });
+            increaseText.addEventListener('click', function() { changeFontSize(1); });
+            
+            function changeFontSize(step) {
+                const currentSize = parseFloat(getComputedStyle(document.body).fontSize);
+                const newSize = currentSize + step;
+                if (newSize >= 12 && newSize <= 24) {
+                    document.body.style.fontSize = newSize + 'px';
+                    localStorage.setItem('fontSize', newSize);
+                }
+            }
+            const savedFontSize = localStorage.getItem('fontSize');
+            if (savedFontSize) { document.body.style.fontSize = savedFontSize + 'px'; }
+            
+            // High Contrast Mode
+            const highContrastToggle = document.getElementById('highContrastToggle');
+            highContrastToggle.addEventListener('click', function() {
+                document.body.classList.toggle('high-contrast');
+                const isHighContrast = document.body.classList.contains('high-contrast');
+                localStorage.setItem('highContrast', isHighContrast);
+            });
+            if (localStorage.getItem('highContrast') === 'true') {
+                document.body.classList.add('high-contrast');
+            }
+            
+            // Dyslexia Mode
+            const dyslexiaToggle = document.getElementById('dyslexiaToggle');
+            dyslexiaToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dyslexia-mode');
+                const isDyslexiaMode = document.body.classList.contains('dyslexia-mode');
+                localStorage.setItem('dyslexiaMode', isDyslexiaMode);
+            });
+            if (localStorage.getItem('dyslexiaMode') === 'true') {
+                document.body.classList.add('dyslexia-mode');
+            }
+            
+            // Underline Links
+            const underlineLinks = document.getElementById('underlineLinks');
+            underlineLinks.addEventListener('click', function() {
+                document.body.classList.toggle('underline-links');
+                const isUnderlineLinks = document.body.classList.contains('underline-links');
+                localStorage.setItem('underlineLinks', isUnderlineLinks);
+            });
+            if (localStorage.getItem('underlineLinks') === 'true') {
+                document.body.classList.add('underline-links');
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Log Carbon Activity - Rolsa Technologies{% endblock %}
+
+{% block extra_css %}
+<style>
+    .carbon-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    .carbon-form {
+        background: var(--card-bg);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        margin-bottom: 40px;
+    }
+    
+    .range-container {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+    
+    .range-container input[type="range"] {
+        flex: 3;
+        height: 8px;
+        border-radius: 5px;
+        background: var(--border-color);
+    }
+    
+    .range-container input[type="number"] {
+        flex: 1;
+    }
+    
+    .carbon-value {
+        text-align: center;
+        font-size: 1.2rem;
+        margin-top: 10px;
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+    
+    .iframe-container {
+        background: var(--card-bg);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+    }
+    
+    .iframe-container iframe {
+        border-radius: 10px;
+    }
+    
+    .activity-tips {
+        background: rgba(46, 139, 87, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .activity-tips h3 {
+        color: var(--primary-color);
+        margin-bottom: 15px;
+    }
+    
+    .activity-tips ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .activity-tips li {
+        padding: 8px 0;
+        padding-left: 25px;
+        position: relative;
+    }
+    
+    .activity-tips li:before {
+        content: "💡";
+        position: absolute;
+        left: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .carbon-form {
+            padding: 25px;
+        }
+        
+        .range-container {
+            flex-direction: column;
+        }
+        
+        .range-container input[type="range"],
+        .range-container input[type="number"] {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="carbon-container">
+    <h1 style="text-align: center; margin-bottom: 40px; color: var(--primary-color);">
+        🌍 Log Your Carbon Activity
+    </h1>
+    
+    <div class="activity-tips">
+        <h3>Common Carbon Activities:</h3>
+        <ul>
+            <li>Car journey (1 ton CO₂e ≈ 2,500 miles driven)</li>
+            <li>Electricity usage (1 ton CO₂e ≈ 3 months of average home electricity)</li>
+            <li>Air travel (1 ton CO₂e ≈ London to New York round trip)</li>
+            <li>Heating (1 ton CO₂e ≈ 4 months of natural gas heating)</li>
+        </ul>
+    </div>
+    
+    <div class="carbon-form">
+        <form id="carbonForm" method="POST" action="{{ url_for('log_carbon') }}">
+            <div class="form-group">
+                <label for="date">Date of Activity:</label>
+                <input type="date" id="date" name="date" class="form-control" 
+                       value="{{ now.strftime('%Y-%m-%d') }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="activity_name">Activity Description:</label>
+                <input type="text" id="activity_name" name="activity_name" class="form-control" 
+                       placeholder="e.g., Business trip to Manchester, Home electricity usage" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="carbon_output">Carbon Output (metric tons CO₂e, 1-10):</label>
+                <div class="range-container">
+                    <input type="range" id="carbon_range" min="1" max="10" value="5" step="1">
+                    <input type="number" id="carbon_output" name="carbon_output" 
+                           class="form-control" min="1" max="10" value="5" required>
+                </div>
+                <div class="carbon-value" id="carbonValue">5 tons CO₂e</div>
+            </div>
+            
+            <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                ✅ Log Activity
+            </button>
+        </form>
+    </div>
+    
+    <div class="iframe-container">
+        <h3 style="margin-bottom: 20px; color: var(--primary-color);">Carbon Footprint Calculator</h3>
+        <iframe width="100%" height="500" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" 
+                src="https://calculator.carbonfootprint.com/calculator.aspx"
+                title="Carbon Footprint Calculator"></iframe>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const carbonRange = document.getElementById('carbon_range');
+        const carbonOutput = document.getElementById('carbon_output');
+        const carbonValue = document.getElementById('carbonValue');
+        
+        function updateCarbonValue(value) {
+            carbonValue.textContent = value + ' tons CO₂e';
+        }
+        
+        carbonRange.addEventListener('input', function() {
+            carbonOutput.value = this.value;
+            updateCarbonValue(this.value);
+        });
+        
+        carbonOutput.addEventListener('input', function() {
+            let value = parseInt(this.value) || 1;
+            if (value > 10) value = 10;
+            if (value < 1) value = 1;
+            this.value = value;
+            carbonRange.value = value;
+            updateCarbonValue(value);
+        });
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const form = document.getElementById('carbonForm');
+        
+        form.addEventListener('submit', function(e) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = '📤 Logging...';
+        });
+    });
+</script>
+{% endblock %}

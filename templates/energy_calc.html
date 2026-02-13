@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}Energy Calculator - Rolsa Technologies{% endblock %}
+
+{% block extra_css %}
+<style>
+    .calculator-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    .calculator-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .calculator-header h1 {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+    
+    .calculator-card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+        margin-bottom: 30px;
+    }
+    
+    .appliance-item {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr auto;
+        gap: 15px;
+        margin-bottom: 15px;
+        align-items: center;
+    }
+    
+    @media (max-width: 768px) {
+        .appliance-item {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .appliance-item input {
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        background: var(--bg-color);
+        color: var(--text-color);
+    }
+    
+    .remove-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .remove-btn:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+    }
+    
+    .add-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 1rem;
+        margin: 20px 0;
+        transition: var(--transition);
+    }
+    
+    .add-btn:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+    
+    .calculate-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        font-weight: bold;
+        width: 100%;
+        transition: var(--transition);
+    }
+    
+    .calculate-btn:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+    
+    .results {
+        margin-top: 30px;
+        padding: 25px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border-radius: 10px;
+        display: none;
+    }
+    
+    .results h3 {
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+    }
+    
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .results-table th {
+        background: rgba(0,0,0,0.1);
+        color: var(--text-color);
+        padding: 12px;
+    }
+    
+    .results-table td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        color: var(--text-color);
+    }
+    
+    .total-row {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid white;
+    }
+    
+    .energy-tip {
+        background: rgba(255,255,255,0.2);
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="calculator-container">
+    <div class="calculator-header">
+        <h1>⚡ Energy Usage Calculator</h1>
+        <p>Calculate your energy consumption and costs</p>
+    </div>
+    
+    <div class="calculator-card">
+        <div class="form-group">
+            <label for="rate">Electricity Rate (per kWh):</label>
+            <div style="display: flex; gap: 10px;">
+                <span style="padding: 10px 0;">£</span>
+                <input type="number" id="rate" class="form-control" step="0.01" value="0.12" style="flex: 1;">
+            </div>
+        </div>
+        
+        <h3 style="margin: 30px 0 20px; color: var(--primary-color);">Your Appliances</h3>
+        <div id="applianceList"></div>
+        
+        <button id="addAppliance" class="add-btn">+ Add Another Appliance</button>
+        
+        <div class="form-group" style="margin-top: 20px;">
+            <label for="timeframe">Calculate for:</label>
+            <select id="timeframe" class="form-control">
+                <option value="day">Daily</option>
+                <option value="week">Weekly</option>
+                <option value="month" selected>Monthly</option>
+                <option value="year">Yearly</option>
+            </select>
+        </div>
+        
+        <button id="calculateBtn" class="calculate-btn">📊 Calculate Usage & Cost</button>
+        
+        <div id="results" class="results">
+            <h3>📈 Results</h3>
+            <div id="resultsContent"></div>
+        </div>
+    </div>
+    
+    <div class="calculator-card">
+        <h3 style="color: var(--primary-color); margin-bottom: 15px;">💡 Energy Saving Tips</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">✓ Switch to LED bulbs - save up to 80% on lighting</li>
+            <li style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">✓ Unplug devices on standby - save £30-50 annually</li>
+            <li style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">✓ Wash clothes at 30°C - save 40% energy per wash</li>
+            <li style="padding: 10px 0;">✓ Install smart thermostats - save up to £150 per year</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const applianceList = document.getElementById('applianceList');
+        const addButton = document.getElementById('addAppliance');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultsDiv = document.getElementById('results');
+        const resultsContent = document.getElementById('resultsContent');
+        
+        // Add first appliance by default
+        addAppliance();
+        
+        addButton.addEventListener('click', addAppliance);
+        calculateBtn.addEventListener('click', calculate);
+        
+        function addAppliance() {
+            const applianceItem = document.createElement('div');
+            applianceItem.className = 'appliance-item';
+            
+            applianceItem.innerHTML = `
+                <input type="text" placeholder="Appliance name (e.g., Refrigerator)" class="form-control appliance-name">
+                <input type="number" placeholder="Wattage (W)" class="form-control appliance-wattage">
+                <input type="number" placeholder="Hours/day" class="form-control appliance-hours">
+                <button class="remove-btn">✕</button>
+            `;
+            
+            applianceList.appendChild(applianceItem);
+            
+            applianceItem.querySelector('.remove-btn').addEventListener('click', function() {
+                applianceItem.remove();
+            });
+        }
+        
+        function calculate() {
+            const rate = parseFloat(document.getElementById('rate').value) || 0.12;
+            const timeframe = document.getElementById('timeframe').value;
+            const applianceItems = document.querySelectorAll('.appliance-item');
+            
+            let totalUsage = 0;
+            let multiplier = timeframe === 'day' ? 1 : timeframe === 'week' ? 7 : timeframe === 'month' ? 30 : 365;
+            
+            let html = '<table class="results-table">';
+            html += '<tr><th>Appliance</th><th>Usage (kWh)</th><th>Cost</th></tr>';
+            
+            applianceItems.forEach(item => {
+                const name = item.querySelector('.appliance-name').value || 'Unnamed Appliance';
+                const wattage = parseFloat(item.querySelector('.appliance-wattage').value) || 0;
+                const hours = parseFloat(item.querySelector('.appliance-hours').value) || 0;
+                
+                const dailyUsage = (wattage * hours) / 1000;
+                const periodUsage = dailyUsage * multiplier;
+                const cost = periodUsage * rate;
+                
+                totalUsage += periodUsage;
+                
+                html += `<tr>
+                    <td>${name}</td>
+                    <td>${periodUsage.toFixed(2)} kWh</td>
+                    <td>£${cost.toFixed(2)}</td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            html += `<div class="total-row">
+                <p><strong>Total Energy Usage:</strong> ${totalUsage.toFixed(2)} kWh</p>
+                <p><strong>Estimated Cost:</strong> £${(totalUsage * rate).toFixed(2)}</p>
+            </div>`;
+            
+            if (applianceItems.length === 0) {
+                html = '<p style="text-align: center;">No appliances added. Add some appliances to calculate usage.</p>';
+            }
+            
+            resultsContent.innerHTML = html;
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+</script>
+{% endblock %}
