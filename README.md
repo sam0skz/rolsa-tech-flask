@@ -1,75 +1,78 @@
-Rolsa Tech – Flask Energy Management Platform
+# Rolsa Tech – Flask Energy Management Platform
 
 Full-stack Flask web application featuring user authentication, carbon tracking, service scheduling, an interactive energy calculator, and accessibility-focused UI features.
 
-Overview
+---
+
+## Overview
 
 Rolsa Tech is a full-stack web application built using Python (Flask) that allows users to:
 
-Create accounts and securely log in
-
-Log and track carbon activities
-
-Schedule renewable energy services
-
-Calculate household energy usage and costs
+- Create accounts and securely log in
+- Log and track carbon activities
+- Schedule renewable energy services
+- Calculate household energy usage and costs
 
 This project was developed as part of my T-Level Digital Production, Design & Development (Software Development pathway) and was awarded a Distinction.
 
-Features
+---
 
-User registration and login system
+## Features
 
-Session-based authentication
+- User registration and login system
+- Session-based authentication
+- Carbon activity logging (stored per user)
+- Appointment scheduling and cancellation
+- Interactive energy usage and cost calculator
+- Accessibility tools:
+  - Dark mode
+  - High contrast mode
+  - Dyslexia-friendly mode
+  - Adjustable text size
 
-Carbon activity logging (stored per user)
+---
 
-Appointment scheduling and cancellation
+## Tech Stack
 
-Interactive energy usage and cost calculator
+- Python (Flask)
+- SQLite
+- HTML / CSS (Jinja templates)
+- JavaScript
 
-Accessibility tools:
+---
 
-Dark mode
+## How to Run
 
-High contrast mode
+### 1. Install Flask
 
-Dyslexia-friendly mode
-
-Adjustable text size
-
-Tech Stack
-
-Python (Flask)
-
-SQLite
-
-HTML / CSS (Jinja templates)
-
-JavaScript
-
-How to Run
-
-Install Flask:
-
+```
 pip install flask
+```
 
 
-Initialise the database:
+### 2. Initialise the database
 
+```
 python RolsaDB.py
+```
 
 
-Start the application:
+### 3. Start the application
 
+```
 python app.py
+```
 
 
-Open in browser:
+### 4. Open in browser
 
+```
 http://127.0.0.1:5000
+``` 
 
+---
 
-Author:
-Samatar Warsame
+## Author
+
+Samatar Warsame  
 Aspiring Software Engineer
